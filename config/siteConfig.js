@@ -1,3 +1,4 @@
+// data settings in target site
 var siteConfig = {
     'make': {
         'mazda': 59
