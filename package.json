@@ -1,0 +1,29 @@
+{
+  "name": "used-car-crawler",
+  "version": "0.0.1",
+  "description": "web crawler for usedCarsCanada.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web",
+    "crawler"
+  ],
+  "author": {
+    "name": "Jiawei Luo",
+    "email": "weiwei100fun@hotmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.1.5",
+    "cheerio": "^0.22.0",
+    "mongoose": "^4.8.4",
+    "promise": "^7.1.1",
+    "request": "^2.79.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrkiddo/usedCarCrawler.git"
+  }
+}
