@@ -13,28 +13,13 @@ mongoose.connect(config.database);
 
 // car information for this running
 var carBasicInfo = {
-    make: siteConfig.make.mazda,
-    model: siteConfig.model['mazda']['mazda 3']
+    makeId: siteConfig.make.mazda,
+    modelId: siteConfig.model['mazda']['mazda 3'],
+    makeName: 'mazda',
+    modelName: 'mazda 3'
 };
 
-tasks.config.init({
+// kick off the tasks
+tasks.run({
     carBasicInfo: carBasicInfo
-});
-
-var tasksList = [
-    tasks.getFirstPageList,
-    tasks.getOtherPageList,
-    tasks.getCarsList,
-    tasks.getCarsDetail
-];
-
-var mainTaskTime = util.executeTime();
-console.log('Main task started');
-
-async.waterfall(tasksList, function (error, result) {
-    if(error) {
-        console.log('Main task error: ', error);
-    }
-    console.log('Main task result: ', result);
-    console.log('Main task finished -- ' + mainTaskTime.end() + ' --');
 });

@@ -5,7 +5,8 @@ var siteConfig = {
     },
     'model': {
         'mazda': {
-            'mazda 3': 46
+            'mazda 3': 46,
+            'cx-5': 36
         }
     },
     'attributes': [

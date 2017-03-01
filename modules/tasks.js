@@ -1,5 +1,4 @@
 var async = require('async');
-var mongoose = require('mongoose');
 var $ = require('cheerio');
 
 var config = require('../config/config');
@@ -7,26 +6,36 @@ var siteConfig = require('../config/siteConfig');
 var util = require('../modules/util');
 var dataService = require('./dataService');
 
+// define object
 var tasks = {};
-var carBasicInfo = {};
 
 tasks.config = {};
-
+tasks.config.carBasicInfo = {};
+/**
+ * @name config.init
+ * @param config {Object}
+ */
 tasks.config.init = function (config) {
-    carBasicInfo = config.carBasicInfo;
+    this.carBasicInfo = config.carBasicInfo;
 };
-
+/**
+ * @name getFirstPageList
+ */
 tasks.getFirstPageList = function (callback) {
     console.log('Task: getFirstPageList started');
     var taskTime = util.executeTime();
     var totalPageNumber = 0;
+    var carBasicInfo = this.config.carBasicInfo;
+    var formData = {
+        make: this.config.carBasicInfo.makeId,
+        model: this.config.carBasicInfo.modelId,
+        makeName: this.config.carBasicInfo.makeName,
+        modelName: this.config.carBasicInfo.modelName,
+    };
     dataService.getPageBody({
         url: config.siteDataUrl,
         method: 'POST',
-        form: {
-            make: carBasicInfo.make,
-            model: carBasicInfo.model
-        }
+        form: formData
     }).then(function (body) {
         // get total page number for this car model
         totalPageNumber = dataService.extractGeneralInfo(body).totalPageNumber;
@@ -43,12 +52,15 @@ tasks.getFirstPageList = function (callback) {
         callback(err, null);
     });
 };
-
+/**
+ * @name getOtherPageList
+ */
 tasks.getOtherPageList = function (prevArg, callback) {
     console.log('Task: getOtherPageList started');
     var taskTime = util.executeTime();
     // prevArg is passed from last task
     var totalPageNumber = prevArg.totalPageNumber;
+    var carBasicInfo = this.config.carBasicInfo;
     var list = [];
     for(var i = 2; i <= totalPageNumber; i++) {
         list.push(i);
@@ -58,8 +70,8 @@ tasks.getOtherPageList = function (prevArg, callback) {
             url: config.siteDataUrl,
             method: 'POST',
             form: {
-                make: carBasicInfo.make,
-                model: carBasicInfo.model,
+                make: carBasicInfo.makeId,
+                model: carBasicInfo.modelId,
                 page: item
             }
         }).then(function (body) {
@@ -83,7 +95,9 @@ tasks.getOtherPageList = function (prevArg, callback) {
         }
     });
 };
-
+/**
+ * @name getCarsList
+ */
 tasks.getCarsList = function (prevArg, callback) {
     console.log('Task: getCarsList started');
     var taskTime = util.executeTime();
@@ -96,7 +110,9 @@ tasks.getCarsList = function (prevArg, callback) {
         callback(error, null);
     });
 };
-
+/**
+ * @name getCarsDetail
+ */
 tasks.getCarsDetail = function (prevArg, callback) {
     var carsList = prevArg || [];
     console.log('Task: getCarsDetail started');
@@ -107,7 +123,7 @@ tasks.getCarsDetail = function (prevArg, callback) {
             url: url,
             method: 'GET'
         }).then(function (body) {
-            return dataService.extractAndSaveEntryInfo(body);
+            return dataService.extractAndSaveEntryInfo(body); // database promise
         }, function (er) {
             console.log('processor error: ', er);
             cb();
@@ -130,5 +146,45 @@ tasks.getCarsDetail = function (prevArg, callback) {
         }
     });
 };
+/**
+ * @name
+ * @description bind current object scope to all tasks
+ * @return tasksList {Array}
+ */
+tasks.getTaskList = function () {
+    var self = this;
+    var tasksList = [
+        this.getFirstPageList,
+        this.getOtherPageList,
+        this.getCarsList,
+        this.getCarsDetail
+    ];
+    tasksList.forEach(function (element, index, array) {
+        array[index] = array[index].bind(self);
+    });
+    return tasksList;
+};
+/**
+ * @name run
+ * @param config {Object}
+ * @description start to run tasks
+ */
+tasks.run = function (config) {
+    var self = this;
+    self.config.init(config);
 
-module.exports = tasks;
+    var tasksList = self.getTaskList();
+
+    var mainTaskTime = util.executeTime();
+    console.log('Main task started');
+
+    async.waterfall(tasksList, function (error, result) {
+        if(error) {
+            console.log('Main task error: ', error);
+        }
+        console.log('Main task result: ', result);
+        console.log('Main task finished -- ' + mainTaskTime.end() + ' --');
+    });
+};
+
+module.exports = Object.assign({}, tasks); // create a new instance
