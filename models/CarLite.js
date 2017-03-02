@@ -4,18 +4,18 @@ var Schema = mongoose.Schema;
 module.exports = mongoose.model('CarLite', new Schema({
     text: {
         type: String,
-        default: '_default car text'
+        default: 'N/A'
     },
     link: {
         type: String,
-        default: '_none'
+        default: 'N/A'
     },
     make: {
         type: String,
-        default: '_none'
+        default: 'N/A'
     },
     model: {
         type: String,
-        default: '_none'
+        default: 'N/A'
     }
 }));

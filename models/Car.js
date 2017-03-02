@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 module.exports = mongoose.model('Car', new Schema({
+    link: {
+        type: String,
+        default: 'N/A'
+    },
     approximate_mileage: {
         type: Number,
         default: 0
@@ -11,6 +15,22 @@ module.exports = mongoose.model('Car', new Schema({
         default: 'N/A'
     },
     dealerName: {
+        type: String,
+        default: 'N/A'
+    },
+    makeId: {
+        type: Number,
+        default: 0
+    },
+    makeName: {
+        type: String,
+        default: 'N/A'
+    },
+    modelId: {
+        type: Number,
+        default: 0
+    },
+    carModelName: {
         type: String,
         default: 'N/A'
     },

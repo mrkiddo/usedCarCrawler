@@ -68,10 +68,27 @@ o.saveToDB = function (Model, data) {
     return promise;
 };
 /**
+ * @name getDataOneFromDB
+ * @description return only entry from database
+ * @param Model {Object}
+ * @param condition {Object}
+ * @param columns {String}
+ * @return Promise {Object}
+ */
+o.getDataOneFromDB = function (Model, condition, columns) {
+    condition = condition || {};
+    var query = Model.findOne(condition);
+    if(columns) {
+        query.select(columns);
+    }
+    return query.exec();
+};
+/**
  * @name getDataFromDB
  * @param Model {Object}
  * @param condition {Object}
  * @param columns {String}
+ * @return Promise {Object}
  */
 o.getDataFromDB = function (Model, condition, columns) {
     condition = condition || {};
@@ -79,6 +96,18 @@ o.getDataFromDB = function (Model, condition, columns) {
     if(columns) {
         query.select(columns);
     }
+    return query.exec();
+};
+/**
+ * @name updateDataFromDB
+ * @param Model {Object}
+ * @param condition {Object}
+ * @param document {Object}
+ * @return Promise {Object}
+ */
+o.updateDataFromDB = function (Model, condition, document) {
+    condition = condition || {};
+    var query = Model.update(condition, document);
     return query.exec();
 };
 
@@ -108,8 +137,8 @@ o.extractEntryUrl = function (body, carInfo) {
         list.push({
             link: $(this).attr('href'),
             text: $(this).text(),
-            make: carInfo.make,
-            model: carInfo.model
+            makeId: carInfo.makeId,
+            modelId: carInfo.modelId
         });
     });
     var result = this.saveToDB(CarLite, list);
@@ -128,7 +157,31 @@ o.getCarUrlList = function () {
     });
 };
 
-o.extractAndSaveEntryInfo = function (body) {
+o.checkEntryExist = function (entryLink) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.getDataOneFromDB(Car, {link: entryLink}, 'link').then(function (doc) {
+            var isExist = true;
+            if(!doc) {
+                isExist = false;
+            }
+            resolve({
+                exist: isExist
+            });
+        }, function (err) {
+            resolve({
+                exist: false
+            });
+        });
+    });
+};
+
+o.extractAndSaveEntryInfo = function (body, entryLink, carBasicInfo) {
+    var modelId = carBasicInfo.modelId;
+    var modelName = carBasicInfo.modelName;
+    var makeId = carBasicInfo.makeId;
+    var makeName = carBasicInfo.makeName;
+
     var attributes = siteConfig.attributes;
     var mapping = siteConfig.attributesMapping;
     var wrapper = $(body).find('.rLeft');
@@ -139,6 +192,12 @@ o.extractAndSaveEntryInfo = function (body) {
 
     var htmlTagReg = util.htmlTagRegExp;
     var entry = {};
+
+    entry.link = entryLink;
+    entry.makeId = parseInt(makeId, 10);
+    entry.makeName = makeName;
+    entry.modelId = parseInt(modelId, 10);
+    entry.carModelName = modelName;
 
     entry.title = wrapper.find('h1').text();
     var price = wrapper.find('h2').text();

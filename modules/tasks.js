@@ -114,16 +114,26 @@ tasks.getCarsList = function (prevArg, callback) {
  * @name getCarsDetail
  */
 tasks.getCarsDetail = function (prevArg, callback) {
-    var carsList = prevArg || [];
     console.log('Task: getCarsDetail started');
+    var carsList = prevArg || [];
+    var carBasicInfo = this.config.carBasicInfo;
     var taskTime = util.executeTime();
     var processor = function (item, cb) {
         var url = config.siteBaseUrl + item.link;
-        dataService.getPageBody({
-            url: url,
-            method: 'GET'
+        // first, check if entry already exists
+        dataService.checkEntryExist(item.link).then(function (result) {
+            if(result.exist) {
+                cb();
+            }
+            else {
+                return dataService.getPageBody({
+                    url: url,
+                    method: 'GET'
+                });
+            }
         }).then(function (body) {
-            return dataService.extractAndSaveEntryInfo(body); // database promise
+            // database promise
+            return dataService.extractAndSaveEntryInfo(body, item.link, carBasicInfo);
         }, function (er) {
             console.log('processor error: ', er);
             cb();
