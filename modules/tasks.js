@@ -180,17 +180,22 @@ tasks.getTaskList = function () {
 };
 /**
  * @name run
+ * @param done {Function}
  * @param config {Object}
- * @description start to run tasks
+ * @description start to run tasks, `done` for async callback
  */
-tasks.run = function (config) {
+tasks.run = function (done, config) {
     var self = this;
-    self.config.init(config);
+    self.config.init(config); // assign car basic information
 
-    var tasksList = self.getTaskList();
+    var modelName = self.config.carBasicInfo.modelName;
+    var makeName = self.config.carBasicInfo.makeName;
+
+    var tasksList = self.getTaskList(); // get task list
 
     var mainTaskTime = util.executeTime();
     console.log('Main task started');
+    console.log('Task for: ' + makeName + ' - ' + modelName);
 
     async.waterfall(tasksList, function (error, result) {
         if(error) {
@@ -198,7 +203,10 @@ tasks.run = function (config) {
         }
         console.log('Main task result: ', result);
         console.log('Main task finished -- ' + mainTaskTime.end() + ' --');
+        done();
     });
 };
 
-module.exports = Object.assign({}, tasks); // create a new instance
+module.exports = function () {
+    return Object.assign({}, tasks);
+}; // create a new instance

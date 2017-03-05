@@ -12,7 +12,7 @@ mongoose.Promise = Promise;
 // connect to mongodb
 mongoose.connect(config.database);
 
-// car information for this running
+// default car information
 var carBasicInfo = {
     makeId: siteConfig.make.mazda,
     modelId: siteConfig.model['mazda']['mazda 3'],
@@ -20,7 +20,30 @@ var carBasicInfo = {
     modelName: 'mazda 3'
 };
 
-// kick off the tasks
-tasks.run({
-    carBasicInfo: carBasicInfo
+var currentMake = 'mazda';
+var currentMakeId = siteConfig.make[currentMake];
+var makeModels = Object.keys(siteConfig.model[currentMake]);
+var modelList = []; // create a list of function to run
+
+makeModels.forEach(function (model) {
+    var carInfo = Object.assign({}, carBasicInfo, {
+        makeId: currentMakeId,
+        modelId: siteConfig.model[currentMake][model],
+        makeName: currentMake,
+        modelName: model
+    });
+    var fn = (function (carInfo) {
+        return function (done) {
+            var taskItem = tasks();
+            taskItem.run(done, {carBasicInfo: carInfo});
+        };
+    })(carInfo);
+    modelList.push(fn); // one function for each model
+});
+
+async.series(modelList, function (err) {
+    if(err) {
+        console.log(err);
+    }
+    console.log('All models are finished');
 });
