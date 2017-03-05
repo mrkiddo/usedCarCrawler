@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-module.exports = mongoose.model('Car', new Schema({
+var carSchema = new Schema({
     link: {
         type: String,
+        unique: true,
         default: 'N/A'
     },
     approximate_mileage: {
@@ -78,4 +79,25 @@ module.exports = mongoose.model('Car', new Schema({
         type: String,
         default: 'N/A'
     }
-}));
+});
+
+carSchema.post('save', function (error, doc, next) {
+    if (error.name === 'MongoError' && error.code === 11000) {
+        next(new Error('There was a duplicate key error'));
+    }
+    else {
+        next(error);
+    }
+});
+
+carSchema.statics.findByLink = function (linkValue, checkExist) {
+    var query = this.find({
+        link: new RegExp(linkValue, 'i')
+    });
+    if(checkExist) {
+        query.select('link');
+    }
+    return query.exec();
+};
+
+module.exports = mongoose.model('Car', carSchema);

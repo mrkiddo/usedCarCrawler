@@ -32,10 +32,14 @@ tasks.getFirstPageList = function (callback) {
         makeName: this.config.carBasicInfo.makeName,
         modelName: this.config.carBasicInfo.modelName,
     };
-    dataService.getPageBody({
-        url: config.siteDataUrl,
-        method: 'POST',
-        form: formData
+    dataService.removeAllCarLiteEntry().then(function () {
+        return dataService.getPageBody({
+            url: config.siteDataUrl,
+            method: 'POST',
+            form: formData
+        });
+    }, function (error) {
+        callback(err, null);
     }).then(function (body) {
         // get total page number for this car model
         totalPageNumber = dataService.extractGeneralInfo(body).totalPageNumber;

@@ -113,6 +113,10 @@ o.updateDataFromDB = function (Model, condition, document) {
 
 // project - oriented methods
 
+o.removeAllCarLiteEntry = function () {
+    return CarLite.removeAll();
+};
+
 o.extractGeneralInfo = function (body) {
     body = $(body);
     var totalEntryNum = body.find('div.resultsText').text();
