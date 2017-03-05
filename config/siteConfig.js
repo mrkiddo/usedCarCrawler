@@ -6,7 +6,15 @@ var siteConfig = {
     'model': {
         'mazda': {
             'mazda 3': 46,
-            'cx-5': 36
+            'mazda 3 sport': 49,
+            'mazda 5': 48,
+            'mazda 6': 38,
+            'mazda speed 3': 50,
+            'mazda speed 6': 51,
+            'cx-3': 8,
+            'cx-5': 36,
+            'cx-7': 12,
+            'cx-9': 15
         }
     },
     'attributes': [
