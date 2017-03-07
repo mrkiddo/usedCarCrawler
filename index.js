@@ -4,14 +4,14 @@ var Promise = require('promise');
 
 var config = require('./config/config');
 var siteConfig = require('./config/siteConfig');
-var util = require('./modules/util');
-var tasks = require('./modules/tasks');
+var crawler = require('./modules/crawler');
 
 // replace mongoose build-in promise library
 mongoose.Promise = Promise;
 // connect to mongodb
 mongoose.connect(config.database);
 
+// TODO: build entries for every car model as an array
 // default car information
 var carBasicInfo = {
     makeId: siteConfig.make.mazda,
@@ -32,18 +32,9 @@ makeModels.forEach(function (model) {
         makeName: currentMake,
         modelName: model
     });
-    var fn = (function (carInfo) {
-        return function (done) {
-            var taskItem = tasks();
-            taskItem.run(done, {carBasicInfo: carInfo});
-        };
-    })(carInfo);
-    modelList.push(fn); // one function for each model
+    modelList.push(carInfo);
 });
 
-async.series(modelList, function (err) {
-    if(err) {
-        console.log(err);
-    }
-    console.log('All models are finished');
-});
+
+// TODO: add `node-schedule` or something similar to trigger
+crawler.run(modelList);
