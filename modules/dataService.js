@@ -141,8 +141,8 @@ o.extractEntryUrl = function (body, carInfo) {
         list.push({
             link: $(this).attr('href'),
             text: $(this).text(),
-            make: carInfo.makeId,
-            model: carInfo.modelId
+            makeId: carInfo.makeId,
+            modelId: carInfo.modelId
         });
     });
     var result = this.saveToDB(CarLite, list);
