@@ -59,7 +59,7 @@ o.getPageBody = function (cfg, processor) {
  */
 o.saveToDB = function (Model, data) {
     var promise;
-    if(data.length === 0) {
+    if(data.length === 1) {
         promise = Model.save(data);
     }
     else {

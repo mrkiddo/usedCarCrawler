@@ -1,5 +1,6 @@
 var async = require('async');
 var $ = require('cheerio');
+var logger = require('../config/logger');
 
 var config = require('../config/config');
 var siteConfig = require('../config/siteConfig');
@@ -22,7 +23,7 @@ tasks.config.init = function (config) {
  * @name getFirstPageList
  */
 tasks.getFirstPageList = function (callback) {
-    console.log('Task: getFirstPageList started');
+    logger.info('Task: getFirstPageList started');
     var taskTime = util.executeTime();
     var totalPageNumber = 0;
     var carBasicInfo = this.config.carBasicInfo;
@@ -39,6 +40,7 @@ tasks.getFirstPageList = function (callback) {
             form: formData
         });
     }, function (error) {
+        logger.error('Error removeAllCarLiteEntry');
         callback(err, null);
     }).then(function (body) {
         // get total page number for this car model
@@ -46,9 +48,10 @@ tasks.getFirstPageList = function (callback) {
         var dataBaseResult = dataService.extractEntryUrl(body, carBasicInfo);
         return dataBaseResult; // database promise
     }, function (err) {
+        logger.error('Error extractEntryUrl');
         callback(err, null);
     }).then(function () {
-        console.log('Task: getFirstPageList finished -- ' + taskTime.end() + ' --');
+        logger.info('Task: getFirstPageList finished -- ' + taskTime.end() + ' --');
         callback(null, {
             totalPageNumber: totalPageNumber
         });
@@ -60,7 +63,7 @@ tasks.getFirstPageList = function (callback) {
  * @name getOtherPageList
  */
 tasks.getOtherPageList = function (prevArg, callback) {
-    console.log('Task: getOtherPageList started');
+    logger.info('Task: getOtherPageList started');
     var taskTime = util.executeTime();
     // prevArg is passed from last task
     var totalPageNumber = prevArg.totalPageNumber;
@@ -89,12 +92,12 @@ tasks.getOtherPageList = function (prevArg, callback) {
     };
     async.eachLimit(list, 10, processor, function (error) {
         if(error) {
-            console.log('Task: getOtherPageList, Error: ', error);
-            console.log('Task: getOtherPageList finished -- ' + taskTime.end() + ' --');
+            logger.error('Task: getOtherPageList, Error: ' + error.message);
+            logger.info('Task: getOtherPageList finished -- ' + taskTime.end() + ' --');
             callback(error, null);
         }
         else {
-            console.log('Task: getOtherPageList finished -- ' + taskTime.end() + ' --');
+            logger.info('Task: getOtherPageList finished -- ' + taskTime.end() + ' --');
             callback(null, 'task finished');
         }
     });
@@ -103,14 +106,15 @@ tasks.getOtherPageList = function (prevArg, callback) {
  * @name getCarsList
  */
 tasks.getCarsList = function (prevArg, callback) {
-    console.log('Task: getCarsList started');
+    logger.info('Task: getCarsList started');
     var taskTime = util.executeTime();
     var carList = [];
     dataService.getCarUrlList().then(function (list) {
-        console.log('Task: getCarsList finished -- ' + taskTime.end() + ' --');
+        logger.info('Task: getCarsList finished -- ' + taskTime.end() + ' --');
         callback(null, list);
     }, function (error) {
-        console.log('Task: getCarsList finished -- ' + taskTime.end() + ' --');
+        logger.error('Task: getCarsList, Error: ' + error.message);
+        logger.info('Task: getCarsList finished -- ' + taskTime.end() + ' --');
         callback(error, null);
     });
 };
@@ -118,7 +122,7 @@ tasks.getCarsList = function (prevArg, callback) {
  * @name getCarsDetail
  */
 tasks.getCarsDetail = function (prevArg, callback) {
-    console.log('Task: getCarsDetail started');
+    logger.info('Task: getCarsDetail started');
     var carsList = prevArg || [];
     var carBasicInfo = this.config.carBasicInfo;
     var taskTime = util.executeTime();
@@ -139,7 +143,7 @@ tasks.getCarsDetail = function (prevArg, callback) {
             // database promise
             return dataService.extractAndSaveEntryInfo(body, item.link, carBasicInfo);
         }, function (er) {
-            console.log('processor error: ', er);
+            logger.error('processor error: ' + er.message);
             cb();
         }).then(function () {
             cb();
@@ -150,12 +154,12 @@ tasks.getCarsDetail = function (prevArg, callback) {
 
     async.eachLimit(carsList, 10, processor, function (error) {
         if(error) {
-            console.log('Task: getCarsDetail, Error: ', error);
-            console.log('Task: getCarsDetail finished -- ' + taskTime.end() + ' --');
+            logger.error('Task: getCarsDetail, Error: ' + error.message);
+            logger.info('Task: getCarsDetail finished -- ' + taskTime.end() + ' --');
             callback(error, null);
         }
         else {
-            console.log('Task: getCarsDetail finished -- ' + taskTime.end() + ' --');
+            logger.info('Task: getCarsDetail finished -- ' + taskTime.end() + ' --');
             callback(null, 'task finished');
         }
     });
@@ -194,15 +198,14 @@ tasks.run = function (done, config) {
     var tasksList = self.getTaskList(); // get task list
 
     var mainTaskTime = util.executeTime();
-    console.log('Main task started');
-    console.log('Task for: ' + makeName + ' - ' + modelName);
+    logger.info('Main task started');
+    logger.info('Task for: ' + makeName + ' - ' + modelName);
 
     async.waterfall(tasksList, function (error, result) {
         if(error) {
-            console.log('Main task error: ', error);
+            logger.error('Main task error: ' + error.message);
         }
-        console.log('Main task result: ', result);
-        console.log('Main task finished -- ' + mainTaskTime.end() + ' --');
+        logger.info('Main task finished -- ' + mainTaskTime.end() + ' --');
         done();
     });
 };
