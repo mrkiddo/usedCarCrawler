@@ -1,10 +1,12 @@
 # IntelliJ project files
+######################
 .idea
 *.iml
 out
 gen
 
 # VS code debug files #
+######################
 .vscode/
 
 # OS generated files #
@@ -21,3 +23,7 @@ Thumbs.db
 ######################
 node_modules/
 lib/
+
+# Log files #
+######################
+logs/

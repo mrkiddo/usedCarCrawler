@@ -10,11 +10,11 @@ var carLiteSchema = new Schema({
         type: String,
         default: 'N/A',
     },
-    make: {
+    makeId: {
         type: String,
         default: 'N/A'
     },
-    model: {
+    modelId: {
         type: String,
         default: 'N/A'
     }

@@ -1,0 +1,187 @@
+module.exports = [{
+	"makeId": "1",
+	"makeName": "Acura"
+}, {
+	"makeId": "115",
+	"makeName": "AM General"
+}, {
+	"makeId": "4",
+	"makeName": "Aston Martin"
+}, {
+	"makeId": "7",
+	"makeName": "Audi"
+}, {
+	"makeId": "10",
+	"makeName": "Bentley"
+}, {
+	"makeId": "11",
+	"makeName": "BMW"
+}, {
+	"makeId": "16",
+	"makeName": "Buick"
+}, {
+	"makeId": "17",
+	"makeName": "Cadillac"
+}, {
+	"makeId": "19",
+	"makeName": "Chevrolet"
+}, {
+	"makeId": "20",
+	"makeName": "Chrysler"
+}, {
+	"makeId": "23",
+	"makeName": "Daewoo"
+}, {
+	"makeId": "114",
+	"makeName": "Daihatsu"
+}, {
+	"makeId": "28",
+	"makeName": "Dodge"
+}, {
+	"makeId": "108",
+	"makeName": "Ducati"
+}, {
+	"makeId": "29",
+	"makeName": "Eagle"
+}, {
+	"makeId": "32",
+	"makeName": "Ferrari"
+}, {
+	"makeId": "33",
+	"makeName": "Fiat"
+}, {
+	"makeId": "34",
+	"makeName": "Ford"
+}, {
+	"makeId": "9",
+	"makeName": "Freightliner"
+}, {
+	"makeId": "37",
+	"makeName": "GMC"
+}, {
+	"makeId": "30",
+	"makeName": "Harley Davidson"
+}, {
+	"makeId": "24",
+	"makeName": "HINO"
+}, {
+	"makeId": "41",
+	"makeName": "Honda"
+}, {
+	"makeId": "99",
+	"makeName": "Hummer"
+}, {
+	"makeId": "43",
+	"makeName": "Hyundai"
+}, {
+	"makeId": "44",
+	"makeName": "Infiniti"
+}, {
+	"makeId": "100",
+	"makeName": "International"
+}, {
+	"makeId": "47",
+	"makeName": "Isuzu"
+}, {
+	"makeId": "48",
+	"makeName": "Jaguar"
+}, {
+	"makeId": "101",
+	"makeName": "Jeep"
+}, {
+	"makeId": "27",
+	"makeName": "Kawasaki"
+}, {
+	"makeId": "51",
+	"makeName": "Kia"
+}, {
+	"makeId": "53",
+	"makeName": "Lamborghini"
+}, {
+	"makeId": "39",
+	"makeName": "Land Rover"
+}, {
+	"makeId": "55",
+	"makeName": "Lexus"
+}, {
+	"makeId": "56",
+	"makeName": "Lincoln"
+}, {
+	"makeId": "58",
+	"makeName": "Maserati"
+}, {
+	"makeId": "59",
+	"makeName": "Mazda"
+}, {
+	"makeId": "60",
+	"makeName": "Mercedes-Benz"
+}, {
+	"makeId": "61",
+	"makeName": "Mercury"
+}, {
+	"makeId": "63",
+	"makeName": "MG"
+}, {
+	"makeId": "35",
+	"makeName": "Mini"
+}, {
+	"makeId": "64",
+	"makeName": "Mitsubishi"
+}, {
+	"makeId": "68",
+	"makeName": "Nissan"
+}, {
+	"makeId": "69",
+	"makeName": "Oldsmobile"
+}, {
+	"makeId": "73",
+	"makeName": "Plymouth"
+}, {
+	"makeId": "74",
+	"makeName": "Pontiac"
+}, {
+	"makeId": "75",
+	"makeName": "Porsche"
+}, {
+	"makeId": "113",
+	"makeName": "Ram"
+}, {
+	"makeId": "77",
+	"makeName": "Renault"
+}, {
+	"makeId": "78",
+	"makeName": "Rolls-Royce"
+}, {
+	"makeId": "80",
+	"makeName": "Saab"
+}, {
+	"makeId": "81",
+	"makeName": "Saturn"
+}, {
+	"makeId": "93",
+	"makeName": "Scion"
+}, {
+	"makeId": "92",
+	"makeName": "smart"
+}, {
+	"makeId": "107",
+	"makeName": "Studebaker"
+}, {
+	"makeId": "87",
+	"makeName": "Subaru"
+}, {
+	"makeId": "89",
+	"makeName": "Suzuki"
+}, {
+	"makeId": "90",
+	"makeName": "Toyota"
+}, {
+	"makeId": "91",
+	"makeName": "Triumph"
+}, {
+	"makeId": "94",
+	"makeName": "Volkswagen"
+}, {
+	"makeId": "95",
+	"makeName": "Volvo"
+}];

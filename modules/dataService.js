@@ -59,7 +59,7 @@ o.getPageBody = function (cfg, processor) {
  */
 o.saveToDB = function (Model, data) {
     var promise;
-    if(data.length === 0) {
+    if(data.length === 1) {
         promise = Model.save(data);
     }
     else {
@@ -141,8 +141,8 @@ o.extractEntryUrl = function (body, carInfo) {
         list.push({
             link: $(this).attr('href'),
             text: $(this).text(),
-            make: carInfo.makeId,
-            model: carInfo.modelId
+            makeId: carInfo.makeId,
+            modelId: carInfo.modelId
         });
     });
     var result = this.saveToDB(CarLite, list);
